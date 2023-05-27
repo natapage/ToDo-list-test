@@ -11,7 +11,7 @@ export const createTask = async (body) =>
   (
     await fetch(tasks, {
       method: "POST",
-      body: JSON.stringify(body),
+      body: JSON.stringify({ data: body }),
       headers: {
         "Content-type": "application/json",
       },
