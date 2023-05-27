@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { getTasks, createTask, deleteTask } from "../api.js";
+import { getTasks, createTask, deleteTask, updateTask } from "../api.js";
 
 const tasks = ref({});
 const taskName = ref("");
@@ -14,6 +14,13 @@ async function fetchPage() {
 async function handleDeleteTask(id) {
   await deleteTask(id);
   await fetchPage();
+}
+
+async function handleUpdateTask(isComplete, id) {
+  const body = {
+    completed: isComplete,
+  };
+  await updateTask(body, id);
 }
 
 async function handleCreateTask() {
@@ -42,24 +49,50 @@ onMounted(() => {
   <div class="todo-task-item" v-for="task in tasks.data" :key="task.id">
     <div class="task-name">{{ task.attributes.name }}</div>
     <div class="task-description">{{ task.attributes.description }}</div>
-    <button @click="() => handleDeleteTask(task.id)">delete</button>
+    <button class="delete-button" @click="() => handleDeleteTask(task.id)">
+      delete
+    </button>
+    <div class="task-actions">
+      <input
+        type="checkbox"
+        v-model="task.attributes.completed"
+        @change="() => handleUpdateTask(task.attributes.completed, task.id)"
+      />
+    </div>
   </div>
 </template>
 
 <style scoped>
+.todo-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.todo-task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .todo-task-item {
-  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
   padding: 10px;
-  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  border: 1px solid #949494;
   border-radius: 5px;
-  background-color: #f5f5f5;
+  background-color: #e2e1e1;
 }
 
 .task-name {
   font-weight: bold;
 }
 
-.task-description {
-  margin-top: 5px;
+.delete-button {
+  margin-left: auto;
+  background-color: #ffffff;
 }
 </style>

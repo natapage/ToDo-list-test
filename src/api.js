@@ -25,7 +25,7 @@ export const updateTask = async (body, id) =>
   (
     await fetch(`${tasks}/${id}`, {
       method: "PUT",
-      body: JSON.stringify(body),
+      body: JSON.stringify({ data: body }),
       headers: {
         "Content-type": "application/json",
       },
